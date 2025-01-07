@@ -2,6 +2,7 @@ package com.example.listycityw25l3;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -51,6 +52,15 @@ public class MainActivity extends AppCompatActivity implements CityDialogFragmen
             @Override
             public void onClick(View v) {
                 new CityDialogFragment().show(getSupportFragmentManager(), "ADD_CITY");
+            }
+        });
+
+        cityList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                City currentCity = cityDataList.get(position);
+                CityDialogFragment.newInstance(currentCity, position).show(getSupportFragmentManager(), "EDIT_CITY");
+                return false;
             }
         });
     }
