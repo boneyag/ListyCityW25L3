@@ -1,6 +1,7 @@
 package com.example.listycityw25l3;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -10,11 +11,13 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements CityDialogFragment.OnFragmentInteractionListener {
     private ListView cityList;
-
+    private FloatingActionButton addCityButton;
     private ArrayList<City> cityDataList;
     private ArrayAdapter<City> cityArrayAdapter;
     @Override
@@ -42,5 +45,27 @@ public class MainActivity extends AppCompatActivity {
         cityArrayAdapter = new CityArrayAdapter(this, R.layout.array_list_content, cityDataList);
 
         cityList.setAdapter(cityArrayAdapter);
+
+        addCityButton = findViewById(R.id.add_city_button);
+        addCityButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new CityDialogFragment().show(getSupportFragmentManager(), "ADD_CITY");
+            }
+        });
+    }
+
+    @Override
+    public void onOkPressListener(City newCity) {
+        cityDataList.add(newCity);
+        cityArrayAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onEditPressListener(City newCity, int position) {
+        City oldCity = cityDataList.get(position);
+        oldCity.setCity(newCity.getCity());
+        oldCity.setProvince(newCity.getProvince());
+        cityArrayAdapter.notifyDataSetChanged();
     }
 }
