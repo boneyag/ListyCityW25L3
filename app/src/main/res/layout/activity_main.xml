@@ -11,8 +11,8 @@
     <ListView
         android:id="@+id/city_list_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
+        android:layout_height="match_parent"
+        android:choiceMode="singleChoice">
     </ListView>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -27,5 +27,18 @@
         android:focusable="true"
         android:tint="@android:color/holo_green_light"
         app:srcCompat="@android:drawable/ic_input_add" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/delete_city_button"
+        android:contentDescription="delete button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|start"
+        android:layout_marginLeft="5dp"
+        android:layout_marginBottom="5dp"
+        android:clickable="true"
+        android:focusable="true"
+        app:backgroundTint="@color/design_default_color_error"
+        app:srcCompat="@android:drawable/ic_delete" />
 
 </FrameLayout>
