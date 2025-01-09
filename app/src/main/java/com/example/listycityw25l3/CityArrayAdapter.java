@@ -1,6 +1,8 @@
 package com.example.listycityw25l3;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +19,7 @@ public class CityArrayAdapter extends ArrayAdapter<City> {
 
     private ArrayList<City> cities;
     private Context context;
+
     public CityArrayAdapter(@NonNull Context context, int resource, @NonNull ArrayList<City> cities) {
         super(context, resource, cities);
         this.cities = cities;
@@ -33,7 +36,6 @@ public class CityArrayAdapter extends ArrayAdapter<City> {
         }
 
         City city = cities.get(position);
-
         TextView cityName = view.findViewById(R.id.city_text_view);
         TextView provinceName = view.findViewById(R.id.province_text_view);
 
