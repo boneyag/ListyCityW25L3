@@ -1,6 +1,8 @@
 package com.example.listycityw25l3;
 
+import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -19,8 +21,12 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity implements CityDialogFragment.OnFragmentInteractionListener {
     private ListView cityList;
     private FloatingActionButton addCityButton;
+    private FloatingActionButton deleteCityButton;
     private ArrayList<City> cityDataList;
     private ArrayAdapter<City> cityArrayAdapter;
+    private int selectedPosition = -1;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,6 +39,9 @@ public class MainActivity extends AppCompatActivity implements CityDialogFragmen
         });
 
         cityList = findViewById(R.id.city_list_view);
+        addCityButton = findViewById(R.id.add_city_button);
+        deleteCityButton = findViewById(R.id.delete_city_button);
+        deleteCityButton.setVisibility(View.INVISIBLE);
 
         String cities[] = {"Edmonton", "Calgary", "Vancouver", "Toronto", "Montreal", "Saskatoon", "Victoria", "Ottawa", "Quebec City", "London", "Kingston"};
         String provinces[] = {"AB", "AB", "BC", "ON", "QC", "SK", "BC", "ON", "QC", "ON", "ON"};
@@ -44,10 +53,8 @@ public class MainActivity extends AppCompatActivity implements CityDialogFragmen
         }
 
         cityArrayAdapter = new CityArrayAdapter(this, R.layout.array_list_content, cityDataList);
-
         cityList.setAdapter(cityArrayAdapter);
 
-        addCityButton = findViewById(R.id.add_city_button);
         addCityButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -63,6 +70,38 @@ public class MainActivity extends AppCompatActivity implements CityDialogFragmen
                 return false;
             }
         });
+
+        cityList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (position == selectedPosition){
+                    deleteCityButton.setVisibility(View.INVISIBLE);
+                    selectedPosition = -1;
+                    cityList.clearChoices();
+                    cityList.getChildAt(position).setBackgroundColor(Color.TRANSPARENT);
+                } else {
+                    if (position != -1){
+                        deleteCityButton.setVisibility(View.VISIBLE);
+                    }
+                    if (selectedPosition != -1){
+                        cityList.getChildAt(selectedPosition).setBackgroundColor(Color.TRANSPARENT);
+                    }
+                    cityList.getChildAt(position).setBackgroundColor(Color.GRAY);
+                    selectedPosition = position;
+                }
+            }
+        });
+
+        deleteCityButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("DEL_BTN", "del button");
+                deleteCity(selectedPosition);
+                deleteCityButton.setVisibility(View.INVISIBLE);
+                cityList.getChildAt(selectedPosition).setBackgroundColor(Color.TRANSPARENT);
+                selectedPosition = -1;
+            }
+        });
     }
 
     @Override
@@ -76,6 +115,11 @@ public class MainActivity extends AppCompatActivity implements CityDialogFragmen
         City oldCity = cityDataList.get(position);
         oldCity.setCity(newCity.getCity());
         oldCity.setProvince(newCity.getProvince());
+        cityArrayAdapter.notifyDataSetChanged();
+    }
+
+    public void deleteCity(int position){
+        cityDataList.remove(position);
         cityArrayAdapter.notifyDataSetChanged();
     }
 }
